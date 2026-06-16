@@ -3,7 +3,5 @@
   "outputDirectory": ".next",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "env": {
-    "DISCORD_TOKEN": "@discord_token"
   }
 }
