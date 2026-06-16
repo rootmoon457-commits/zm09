@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { randomBytes } from 'crypto';
+import { getSteamAppDetails, validateAppId } from "@/utils/steamAPI";
+import { generateSteamManifest, formatManifest } from "@/utils/manifestGenerator";
+import { generateLuaScript } from "@/utils/luaGenerator";
 
 // Simple file storage that works without database
 const fileStorage = new Map<string, any>();
@@ -10,11 +13,6 @@ export async function POST(request: NextRequest) {
     
     const { appId, discordUserId, discordUsername } = await request.json();
     console.log(`📝 Processing request for App ID: ${appId}, User: ${discordUsername}`);
-
-    // Import utility functions
-    const { getSteamAppDetails, validateAppId } = await import('../../../../../utils/steamAPI');
-    const { generateSteamManifest, formatManifest } = await import('../../../../../utils/manifestGenerator');
-    const { generateLuaScript } = await import('../../../../../utils/luaGenerator');
 
     // Validate input
     if (!validateAppId(appId)) {
@@ -124,7 +122,7 @@ export async function POST(request: NextRequest) {
       }
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ Error generating files:', error);
     return NextResponse.json(
       { error: 'Failed to generate files: ' + error.message },
